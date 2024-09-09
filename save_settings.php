@@ -30,7 +30,7 @@ if (isset($data['website_url']) && isset($data['poll_interval']) && isset($data[
     ];
 
     // Attempt to write settings to file
-    $result = file_put_contents('plugins/naughty_nice_list/settings.json', json_encode($settings));
+    $result = file_put_contents('/api/configfile/plugin.settings.json', json_encode($settings));
     
     if ($result === false) {
         echo 'Failed to save settings.';
