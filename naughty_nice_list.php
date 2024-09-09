@@ -4,6 +4,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+    <?php include $settings['pluginDirectory'] . "/fpp-zettle/pluginUpdate.php" ?>
+    
     <div class="container">
         <h1>Naughty Nice List Settings</h1>
         
