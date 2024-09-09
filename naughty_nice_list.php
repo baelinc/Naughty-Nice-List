@@ -2,6 +2,7 @@
 include $settings['pluginDirectory'] . "/fpp-naughty-nice-list/pluginUpdate.php";
 $pluginName = 'naughty-nice-list';
 $pluginJson = convertAndGetSettings($pluginName);
+
 $setupUrl = 'plugin.php?' . http_build_query([
     '_menu' => 'content',
     'plugin' => 'fpp-' . $pluginName,
@@ -9,13 +10,16 @@ $setupUrl = 'plugin.php?' . http_build_query([
 ]);
 
 function sortByTimestampDesc($a, $b) {
-    return $b['timestamp'] > $a['timestamp'];
+    return $b['timestamp'] <=> $a['timestamp']; // Corrected comparison operator
 }
 
 function getListEntries($listType) {
     $data = convertAndGetSettings('naughty-nice-list');
-    usort($data[$listType], 'sortByTimestampDesc');
-    return array_slice($data[$listType], 0, 5); // Limit to last 5 entries
+    if (isset($data[$listType])) {
+        usort($data[$listType], 'sortByTimestampDesc');
+        return array_slice($data[$listType], 0, 5); // Limit to last 5 entries
+    }
+    return [];
 }
 ?>
 <head>
@@ -28,22 +32,25 @@ function getListEntries($listType) {
     <div id="naughty_list"></div>
     <div id="nice_list"></div>
     <script>
-        const naughtyListData = <?php echo json_encode(getListEntries('naughty')); ?>;
-        const niceListData = <?php echo json_encode(getListEntries('nice')); ?>;
+        // Fetch data from PHP and render grids
+        document.addEventListener('DOMContentLoaded', function() {
+            const naughtyListData = <?php echo json_encode(getListEntries('naughty')); ?>;
+            const niceListData = <?php echo json_encode(getListEntries('nice')); ?>;
 
-        new gridjs.Grid({
-            columns: ["Name", "Date"],
-            data: naughtyListData.map(item => [item.name, new Date(item.timestamp).toLocaleString()]),
-            pagination: true,
-            sort: true
-        }).render(document.getElementById("naughty_list"));
+            new gridjs.Grid({
+                columns: ["Name", "Date"],
+                data: naughtyListData.map(item => [item.name, new Date(item.timestamp).toLocaleString()]),
+                pagination: true,
+                sort: true
+            }).render(document.getElementById("naughty_list"));
 
-        new gridjs.Grid({
-            columns: ["Name", "Date"],
-            data: niceListData.map(item => [item.name, new Date(item.timestamp).toLocaleString()]),
-            pagination: true,
-            sort: true
-        }).render(document.getElementById("nice_list"));
+            new gridjs.Grid({
+                columns: ["Name", "Date"],
+                data: niceListData.map(item => [item.name, new Date(item.timestamp).toLocaleString()]),
+                pagination: true,
+                sort: true
+            }).render(document.getElementById("nice_list"));
+        });
     </script>
 <?php } else { ?>
     <p>Please configure the plugin. <a href="<?php echo $setupUrl; ?>">Go to setup</a></p>
