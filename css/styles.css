@@ -1,25 +1,18 @@
-#nnl-container {
-    display: flex;
-    justify-content: space-between;
+#naughty_list, #nice_list {
+    margin-top: 20px;
+}
+
+.gridjs-container {
+    border: 2px solid #ccc;
+}
+
+.gridjs-head {
+    background-color: #f5f5f5;
+    border-bottom: 2px solid #ccc;
+    text-align: center;
+}
+
+.gridjs-th, .gridjs-td {
+    text-align: center;
     padding: 10px;
-}
-
-#nnl-naughty, #nnl-nice {
-    width: 48%;
-    background-color: #f4f4f4;
-    padding: 10px;
-    border-radius: 8px;
-}
-
-#nnl-naughty h2, #nnl-nice h2 {
-    margin-top: 0;
-}
-
-#nnl-naughty-list, #nnl-nice-list {
-    list-style-type: none;
-    padding-left: 0;
-}
-
-#nnl-naughty-list li, #nnl-nice-list li {
-    padding: 5px 0;
 }
