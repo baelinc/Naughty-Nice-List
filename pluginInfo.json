@@ -1,0 +1,23 @@
+{
+    "repoName": "naughty-nice-list",
+    "name": "Naughty Nice List",
+    "author": "Johnathan Evans",
+    "description": "This plugin displays the Naughty and Nice lists with customizable settings. It allows you to configure the website URL, polling interval, and the number of names to show from each list.",
+    "homeURL": "https://christmas.onthehill.us",
+    "srcURL": "https://github.com/baelinc/Naughty-Nice-List.git",
+    "bugURL": "https://github.com/baelinc/Naughty-Nice-List/issues",
+    "allowUpdates": 1,
+    "versions": [
+        {
+            "minFPPVersion": "2.0",
+            "maxFPPVersion": "0",
+            "branch": "main",
+            "sha": "",
+            "dependencies": {
+                "plugins": [],
+                "packages": [],
+                "scripts": []
+            }
+        }
+    ]
+}
