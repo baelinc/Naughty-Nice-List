@@ -1,0 +1,11 @@
+{
+  "client_id": "",
+  "client_secret": "",
+  "subscriptions": {
+    "contactEmail": "",
+    "destination": "",
+    "status": ""
+  },
+  "naughty": [],
+  "nice": []
+}
