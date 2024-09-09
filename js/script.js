@@ -1,10 +1,11 @@
-$ajaxloc['pluginDirectory'] . "/naughty-nice-list/include/ajax-handler.php";
+// Path to the AJAX-HANDLER file
+$ajaxFilePath = '/plugin.php?plugin=naughty-nice-list&file=/include/ajax-handler.php&nopage=1';
 
 document.addEventListener('DOMContentLoaded', function() {
     fetchListEntries();
 
     function fetchListEntries() {
-        fetch($ajaxloc) // Ensure this path is correct
+        fetch($ajaxFilePath) // Ensure this path is correct
             .then(response => response.json())
             .then(data => {
                 if (data.error) {
