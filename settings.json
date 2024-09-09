@@ -1,0 +1,5 @@
+{
+    "website_url": "http://example.com",
+    "poll_interval": 30,
+    "num_names": 5
+}
