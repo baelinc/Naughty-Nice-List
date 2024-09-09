@@ -4,7 +4,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function fetchListEntries() {
         fetch('/plugin.php?plugin=naughty-nice-list&file=php/ajax-handler.php')
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.error) {
                     console.error('Error fetching list entries:', data.error);
@@ -14,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 updateGrid('naughty_list', data.naughty);
                 updateGrid('nice_list', data.nice);
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => console.error('Fetch error:', error));
     }
 
     function updateGrid(elementId, entries) {
