@@ -141,4 +141,3 @@ function getStatusData($pj) {
         <!-- Prompt the user to set up the plugin if no website URL is configured -->
         <p>You need to configure this plugin before you can see the status. Click <a href="<?php echo $setupUrl; ?>">here</a> to configure.</p>
     <?php } ?>
-</body>
