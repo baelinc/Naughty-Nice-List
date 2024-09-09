@@ -1,99 +1,144 @@
-    <link rel="stylesheet" href="plugin.php?plugin=naughty_nice_list/css&file=style.css&nopage=1"/>
-    <script src="plugin.php?plugin=naughty_nice_list/js&file=script.js" defer></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<?php 
+include $settings['pluginDirectory'] . "/naughty_nice_list/pluginUpdate.php"; 
 
-    <?php include $settings['pluginDirectory'] . "/fpp-zettle/pluginUpdate.php" ?>
-    
-    <div class="container">
-        <h1>Naughty Nice List Settings</h1>
-        
-        <!-- Tabs for navigation -->
-        <ul class="nav nav-tabs" role="tablist">
-            <li class="nav-item">
-                <a class="nav-link active" id="nnl-general-settings-tab" data-toggle="tab" href="#nnl-general-settings" role="tab" aria-controls="nnl-general-settings" aria-selected="true">General Settings</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="nnl-display-settings-tab" data-toggle="tab" href="#nnl-display-settings" role="tab" aria-controls="nnl-display-settings" aria-selected="false">Display Settings</a>
-            </li>
-        </ul>
-        
-        <div class="tab-content mt-2">
-            <!-- General Settings Tab -->
-            <div class="tab-pane fade show active" id="nnl-general-settings" role="tabpanel" aria-labelledby="nnl-general-settings-tab">
-                <form id="nnl-settings-form">
-                    <div class="form-group">
-                        <label for="nnl_website_url">Website URL:</label>
-                        <input type="text" class="form-control" id="nnl_website_url" name="nnl_website_url">
-                    </div>
-                    <div class="form-group">
-                        <label for="nnl_poll_interval">Polling Interval:</label>
-                        <select class="form-control" id="nnl_poll_interval" name="nnl_poll_interval">
-                            <!-- Options will be populated by JavaScript -->
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="nnl_num_names">Number of Names to Display:</label>
-                        <input type="number" class="form-control" id="nnl_num_names" name="nnl_num_names" min="1" max="10">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Save Settings</button>
-                    <div id="message" class="mt-2"></div>
-                </form>
-            </div>
+// Include common functionality
+include_once 'naughty_nice_list.common.php';
 
-            <!-- Display Settings Tab -->
-            <div class="tab-pane fade" id="nnl-display-settings" role="tabpanel" aria-labelledby="nnl-display-settings-tab">
-                <h2>Display Settings</h2>
-                <p>Here you can configure how the lists are displayed. (Additional settings can be added here.)</p>
-                <!-- Add additional fields for display settings if needed -->
-            </div>
-        </div>
-    </div>
+// Plugin-specific variables
+$pluginName = 'naughty_nice_list';
+$pluginJson = convertAndGetSettings($pluginName);
 
-    <!-- JavaScript to handle form submission and populate options -->
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Populate polling interval options
-        const intervals = [5, 15, 25, 35, 45, 60, 120, 180];
-        const selectElement = document.getElementById('nnl_poll_interval');
-        intervals.forEach(interval => {
-            const option = document.createElement('option');
-            option.value = interval;
-            option.textContent = `${interval} seconds`;
-            selectElement.appendChild(option);
-        });
+// Setup URL for configuration
+$setupUrl = 'plugin.php?' . http_build_query([
+    '_menu' => 'content',
+    'plugin' => 'fpp-' . $pluginName,
+    'page' => 'setup.php'
+]);
 
-        // Load existing settings
-        fetch('plugins/naughty_nice_list/settings.json')
-            .then(response => response.json())
-            .then(settings => {
-                document.getElementById('nnl_website_url').value = settings.website_url || '';
-                document.getElementById('nnl_poll_interval').value = settings.poll_interval || 30;
-                document.getElementById('nnl_num_names').value = settings.num_names || 5;
-            });
+// Function to get the latest 5 names for display
+function getNames($type = 'naughty') {
+    global $pluginName;
+    $filename = $pluginName . "_list_" . $type . ".json";
+    $names = convertAndGetSettings($filename);
+    return array_slice($names, 0, 5); // Get the latest 5 names
+}
 
-        // Handle form submission
-        document.getElementById('nnl-settings-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const formData = new FormData(this);
-            const settings = {
-                website_url: formData.get('nnl_website_url'),
-                poll_interval: formData.get('nnl_poll_interval'),
-                num_names: formData.get('nnl_num_names')
-            };
+// Function to display the status data
+function getStatusData($pj) {
+    return [
+        [
+            "website_url" => $pj['website_url'],
+            "poll_interval" => $pj['poll_interval'] . " seconds",
+            "num_names" => $pj['num_names'] . " names"
+        ]
+    ];
+}
+?>
 
-            fetch('plugins/naughty_nice_list/save_settings.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(settings)
-            })
-            .then(response => response.text())
-            .then(message => {
-                document.getElementById('message').textContent = message;
-            });
-        });
-    });
-</script>
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css">
+    <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
+    <style>
+        /* Custom styles for the display */
+        .avatar {
+            width: 40px;
+            min-width: 40px;
+            height: 40px;
+        }
+
+        .rounded {
+            border-radius: .25rem !important;
+        }
+
+        .ms-3 {
+            margin-left: 1rem !important;
+        }
+    </style>
+</head>
+
+<body>
+    <?php if ($pluginJson['website_url'] != '') { ?>
+
+        <!-- Display plugin status using Grid.js -->
+        <div id="status"></div>
+        <script>
+            new gridjs.Grid({
+                columns: [
+                    { id: 'website_url', name: 'Website URL' },
+                    { id: 'poll_interval', name: 'Poll Interval' },
+                    { id: 'num_names', name: 'Number of Names' }
+                ],
+                data: <?php echo json_encode(getStatusData($pluginJson)); ?>,
+                style: {
+                    table: {
+                        border: '3px solid #ccc'
+                    },
+                    th: {
+                        'background-color': 'rgba(0, 0, 0, 0.1)',
+                        color: '#000',
+                        'border-bottom': '3px solid #ccc',
+                        'text-align': 'center'
+                    },
+                    td: {
+                        'text-align': 'center'
+                    }
+                }
+            }).render(document.getElementById("status"));
+        </script>
+
+        <!-- Display the latest names from both Naughty and Nice lists -->
+        <h3>Naughty List</h3>
+        <div id="naughty-list"></div>
+        <script>
+            new gridjs.Grid({
+                columns: [
+                    { id: 'name', name: 'Child Name' }
+                ],
+                data: <?php echo json_encode(getNames('naughty')); ?>,
+                style: {
+                    table: {
+                        border: '3px solid #ccc'
+                    },
+                    th: {
+                        'background-color': 'rgba(255, 0, 0, 0.1)',
+                        color: '#000',
+                        'border-bottom': '3px solid #ccc',
+                        'text-align': 'center'
+                    },
+                    td: {
+                        'text-align': 'center'
+                    }
+                }
+            }).render(document.getElementById("naughty-list"));
+        </script>
+
+        <h3>Nice List</h3>
+        <div id="nice-list"></div>
+        <script>
+            new gridjs.Grid({
+                columns: [
+                    { id: 'name', name: 'Child Name' }
+                ],
+                data: <?php echo json_encode(getNames('nice')); ?>,
+                style: {
+                    table: {
+                        border: '3px solid #ccc'
+                    },
+                    th: {
+                        'background-color': 'rgba(0, 255, 0, 0.1)',
+                        color: '#000',
+                        'border-bottom': '3px solid #ccc',
+                        'text-align': 'center'
+                    },
+                    td: {
+                        'text-align': 'center'
+                    }
+                }
+            }).render(document.getElementById("nice-list"));
+        </script>
+
+    <?php } else { ?>
+        <!-- Prompt the user to set up the plugin if no website URL is configured -->
+        <p>You need to configure this plugin before you can see the status. Click <a href="<?php echo $setupUrl; ?>">here</a> to configure.</p>
+    <?php } ?>
+</body>
