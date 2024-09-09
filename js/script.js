@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     fetchListEntries();
 
     function fetchListEntries() {
-        fetch('/js/ajax-handler.php') // Ensure this path is correct
+        fetch('/include/ajax-handler.php') // Ensure this path is correct
             .then(response => response.json())
             .then(data => {
                 if (data.error) {
