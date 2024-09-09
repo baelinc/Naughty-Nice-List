@@ -1,4 +1,3 @@
-<?php
 // Turn off error display but log errors
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
@@ -21,4 +20,3 @@ if ($data && isset($data['naughty']) && isset($data['nice'])) {
     // Return an error JSON response
     echo json_encode(['error' => 'Unable to retrieve lists']);
 }
-?>
