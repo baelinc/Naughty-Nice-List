@@ -1,5 +1,6 @@
 <?php
-// ajax-handler.php
+// Ensure no PHP errors are displayed as HTML
+ini_set('display_errors', 0); // Turn off error reporting
 header('Content-Type: application/json');
 
 // Fetch the naughty and nice lists from the settings
