@@ -3,7 +3,7 @@
  * Plugin Name: Naughty Nice List
  * Description: A plugin to display the Naughty and Nice lists with configurable options.
  * Version: 1.0
- * Author: Your Name
+ * Author: Johnathan Evans
  */
 
 // Enqueue scripts and styles
