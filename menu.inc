@@ -12,18 +12,18 @@
 # help menu in this example template.
 
 $menuEntries = Array(
-	Array(
-		'text' => 'Naughty Nice List',
-		'type' => 'settings',
-		'page' => 'settings.php',
-		'wrap' => 1
-	),
 #	Array(
-#		'text' => 'Template - Content Setup',
-#		'type' => 'content',
-#		'page' => 'content.php',
+#		'text' => 'Naughty Nice List',
+#		'type' => 'settings',
+#		'page' => 'settings.php',
 #		'wrap' => 1
 #	),
+	Array(
+		'text' => 'Naughty Nice List',
+		'type' => 'content',
+		'page' => 'naughty_nice_list.php',
+		'wrap' => 1
+	),
 #	Array(
 #		'text' => 'Template - Output',
 #		'type' => 'output',
