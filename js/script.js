@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     fetchListEntries();
 
     function fetchListEntries() {
-        fetch('/plugin.php?plugin=naughty-nice-list&file=php/ajax-handler.php')
+        fetch('/plugin.php?plugin=naughty-nice-list&file=ajax-handler.php') // Update path as needed
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
