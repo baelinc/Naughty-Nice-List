@@ -1,5 +1,5 @@
 // Path to the AJAX-HANDLER file
-$ajaxFilePath = '/plugin.php?plugin=naughty-nice-list/include/&file=ajax-handler.php&nopage=1';
+$ajaxFilePath = '/plugin.php?plugin=naughty-nice-list/include/ajax-handler.php&nopage=1';
 
 document.addEventListener('DOMContentLoaded', function() {
     fetchListEntries();
