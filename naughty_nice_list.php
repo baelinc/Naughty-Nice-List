@@ -30,13 +30,37 @@ function nnl_settings_page() {
     ?>
     <div class="wrap">
         <h1>Naughty Nice List Settings</h1>
-        <form method="post" action="options.php">
-            <?php
-            settings_fields('nnl_options_group');
-            do_settings_sections('naughty_nice_list');
-            submit_button();
-            ?>
-        </form>
+        
+        <!-- Include custom CSS and JS -->
+        <link rel="stylesheet" href="<?php echo plugin_dir_url(__FILE__); ?>css/custom-settings.css"/>
+        <script src="<?php echo plugin_dir_url(__FILE__); ?>js/custom-settings.js"></script>
+
+        <div class="row">
+            <ul class="nav nav-pills" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="nnl-general-settings-tab" data-bs-toggle="pill" href="#nnl-general-settings" role="tab" aria-controls="home" aria-selected="true">General Settings</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="nnl-display-settings-tab" data-bs-toggle="pill" href="#nnl-display-settings" role="tab" aria-controls="profile" aria-selected="false">Display Settings</a>
+                </li>
+            </ul>
+            <div class="tab-content mt-2">
+                <div class="tab-pane fade show active" id="nnl-general-settings" role="tabpanel" aria-labelledby="nnl-general-settings-tab">
+                    <form method="post" action="options.php">
+                        <?php
+                        settings_fields('nnl_options_group');
+                        do_settings_sections('naughty_nice_list');
+                        submit_button();
+                        ?>
+                    </form>
+                </div>
+                <div class="tab-pane fade" id="nnl-display-settings" role="tabpanel" aria-labelledby="nnl-display-settings-tab">
+                    <h2>Display Settings</h2>
+                    <p>Here you can configure how the lists are displayed.</p>
+                    <!-- Add additional settings fields for display configuration here -->
+                </div>
+            </div>
+        </div>
     </div>
     <?php
 }
