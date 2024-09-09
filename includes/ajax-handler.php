@@ -4,7 +4,7 @@ ini_set('display_errors', 0); // Turn off error reporting
 header('Content-Type: application/json');
 
 // Path to the JSON file
-$jsonFilePath = '/path/to/your/naughty-nice-list.json';
+$jsonFilePath = '/plugin.php?plugin=naughty-nice-list&file=plugininfo.json&nopage=1';
 
 // Check if the file exists
 if (file_exists($jsonFilePath)) {
