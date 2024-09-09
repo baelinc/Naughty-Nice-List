@@ -21,7 +21,7 @@ $menuEntries = Array(
 	Array(
 		'text' => 'Naughty Nice List',
 		'type' => 'content',
-		'page' => 'naughty_nice_list.php',
+		'page' => 'plugin.php',
 		'wrap' => 1
 	),
 #	Array(
