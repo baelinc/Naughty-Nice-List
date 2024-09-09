@@ -51,47 +51,47 @@
 
     <!-- JavaScript to handle form submission and populate options -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Populate polling interval options
-            const intervals = [5, 15, 25, 35, 45, 60, 120, 180];
-            const selectElement = document.getElementById('nnl_poll_interval');
-            intervals.forEach(interval => {
-                const option = document.createElement('option');
-                option.value = interval;
-                option.textContent = `${interval} seconds`;
-                selectElement.appendChild(option);
+    document.addEventListener('DOMContentLoaded', function() {
+        // Populate polling interval options
+        const intervals = [5, 15, 25, 35, 45, 60, 120, 180];
+        const selectElement = document.getElementById('nnl_poll_interval');
+        intervals.forEach(interval => {
+            const option = document.createElement('option');
+            option.value = interval;
+            option.textContent = `${interval} seconds`;
+            selectElement.appendChild(option);
+        });
+
+        // Load existing settings
+        fetch('plugins/naughty_nice_list/settings.json')
+            .then(response => response.json())
+            .then(settings => {
+                document.getElementById('nnl_website_url').value = settings.website_url || '';
+                document.getElementById('nnl_poll_interval').value = settings.poll_interval || 30;
+                document.getElementById('nnl_num_names').value = settings.num_names || 5;
             });
 
-            // Load existing settings
-            fetch('plugins/naughty_nice_list/settings.json')
-                .then(response => response.json())
-                .then(settings => {
-                    document.getElementById('nnl_website_url').value = settings.website_url || '';
-                    document.getElementById('nnl_poll_interval').value = settings.poll_interval || 30;
-                    document.getElementById('nnl_num_names').value = settings.num_names || 5;
-                });
+        // Handle form submission
+        document.getElementById('nnl-settings-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            const settings = {
+                website_url: formData.get('nnl_website_url'),
+                poll_interval: formData.get('nnl_poll_interval'),
+                num_names: formData.get('nnl_num_names')
+            };
 
-            // Handle form submission
-            document.getElementById('nnl-settings-form').addEventListener('submit', function(event) {
-                event.preventDefault();
-                const formData = new FormData(this);
-                const settings = {
-                    website_url: formData.get('nnl_website_url'),
-                    poll_interval: formData.get('nnl_poll_interval'),
-                    num_names: formData.get('nnl_num_names')
-                };
-
-                fetch('plugins/naughty_nice_list/save_settings.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(settings)
-                })
-                .then(response => response.text())
-                .then(message => {
-                    document.getElementById('message').textContent = message;
-                });
+            fetch('plugins/naughty_nice_list/save_settings.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(settings)
+            })
+            .then(response => response.text())
+            .then(message => {
+                document.getElementById('message').textContent = message;
             });
         });
-    </script>
+    });
+</script>
